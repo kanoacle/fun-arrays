@@ -5,6 +5,7 @@ console.log(dataset);
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
+
 var hundredThousandairs = null;
 /*
   set a new key for each object in bankBalances named `rounded`
