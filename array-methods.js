@@ -1,39 +1,34 @@
-var dataset = require('./dataset.json');
+/*jshint esversion: 6*/
+
+const dataset = require('./dataset.json').bankBalances;
 console.log(dataset);
-/*
-  create an array with accounts from bankBalances that are
-  greater than 100000.00
-  assign the resulting array to `hundredThousandairs`
-*/
 
-var hundredThousandairs = null;
-/*
-  set a new key for each object in bankBalances named `rounded`
-  the value of this key will be the `amount` rounded to the nearest dollar
-  example
-    {
-      "amount": "134758.44",
-      "state": "HI",
-      "rounded": 134758
-    }
-  assign the resulting array to `roundedDollar`
-*/
-var roundedDollar = null;
+var hundredThousandairs = dataset.filter(function (element, index, array) {
+  return Number(element.amount) > 100000;
+});
 
-/*
-  set a the `amount` value for each object in bankBalances
-  to the value of `amount` rounded to the nearest 10 cents
-  example
-    {
-      "amount": 134758.4,
-      "state": "HI"
-    }
-  assign the resulting array to `roundedDime`
-*/
-var roundedDime = null;
+var roundedDollar = dataset.map(function (element, index, array) {
+  var rounded = Number(parseFloat(element.amount).toFixed(0));
+  return {
+    amount : element.amount,
+    state : element.state,
+    rounded : rounded
+  };
+});
 
-// set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = null;
+var roundedDime = dataset.map(function (element, index, array) {
+  var rounded = Number(parseFloat(element.amount).toFixed(1));
+  return {
+    amount : element.amount,
+    state : element.state,
+    roundedDime : rounded
+  };
+});
+
+var sumOfBankBalances = dataset.reduce(function (prev, curr) {
+  var sum = prev + Number(curr.amount);
+  return Math.round(sum * 100) / 100;
+}, 0);
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -47,7 +42,12 @@ var sumOfBankBalances = null;
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfInterests = null;
+var sumOfInterests = dataset.filter(function (element, index, array) {
+  return element.state==='WI' || element.state==='IL' || element.state==='WY' || element.state==='OH'|| element.state==='GA' || element.state==='DE';
+}).reduce(function (prev, curr) {
+  var sum = prev + Number(curr.amount * 0.189);
+  return Math.round(sum * 100) / 100;
+}, 0);
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
